@@ -1,15 +1,13 @@
 var Color = (function() {
 
-  var
-    Max = Math.max, Min = Math.min,
-    R, G, B, A, HSL;
+  var R, G, B, A, HSL;
 
   function toHSL() {
     var
       r = R/255,
       g = G/255,
       b = B/255,
-      max = Max(r, g, b), min = Min(r, g, b),
+      max = Math.max(r, g, b), min = Math.min(r, g, b),
       h, s, l = (max+min) / 2,
       d = max-min;
 
@@ -58,8 +56,8 @@ var Color = (function() {
     return p;
   }
 
-  function maxValue(val, max) {
-    return Min(max, Max(0, val));
+  function limit(val, max) {
+    return Math.min(max, Math.max(0, val));
   }
 
   /*
@@ -92,33 +90,21 @@ var Color = (function() {
 
   proto.hue = function(h) {
     if (!HSL) toHSL();
-    if (h !== undefined) {
-      HSL.h = maxValue(h, 360);
-    }
-    return HSL.h;
+    HSL.h = limit(HSL.h*h, 360);
   };
-  
+
   proto.saturation = function(s) {
     if (!HSL) toHSL();
-    if (s !== undefined) {
-      HSL.s = maxValue(s, 1);
-    }
-    return HSL.s;
+    HSL.s = limit(HSL.s*s, 1);
   };
 
   proto.lightness = function(l) {
     if (!HSL) toHSL();
-    if (l !== undefined) {
-      HSL.l = maxValue(l, 1);
-    }
-    return HSL.l;
+    HSL.l = limit(HSL.l*l, 1);
   };
 
   proto.alpha = function(a) {
-    if (a !== undefined) {
-      A = maxValue(a, 360);
-    }
-    return A;
+    A = limit(A*a, 1);
   };
 
   proto.toString = function() {
