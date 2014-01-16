@@ -26,7 +26,9 @@ Parameter for new Color(...) can be in any of these:
 
 Available Methods are:
 
- * setHue()
- * setLightness()
- * setSaturation()
- * setAlpha()
+ * hue(0..360)
+ * lightness(0..1)
+ * saturation(0..1)
+ * alpha(0..1)
+
+Note that the parameters are a relative change. new Color('rgba(0,0,0,0.5)').alpha(0.5) would result in 'rgba(0,0,0,0.25)'
