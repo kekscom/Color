@@ -1,13 +1,15 @@
 var Color = (function() {
 
-  var R, G, B, A, HSL;
+  var
+    Max = Math.max, Min = Math.min,
+    R, G, B, A, HSL;
 
   function toHSL() {
     var
       r = R/255,
       g = G/255,
       b = B/255,
-      max = Math.max(r, g, b), min = Math.min(r, g, b),
+      max = Max(r, g, b), min = Min(r, g, b),
       h, s, l = (max+min) / 2,
       d = max-min;
 
@@ -48,22 +50,16 @@ var Color = (function() {
   }
 
   function hue2rgb(p, q, t) {
-    if (t < 0) {
-      t += 1;
-    }
-    if (t > 1) {
-      t -= 1;
-    }
-    if (t < 1/6) {
-      return p + (q-p) * 6 * t;
-    }
-    if (t < 1/2) {
-      return q;
-    }
-    if (t < 2/3) {
-      return p + (q-p) * (2/3 - t) * 6;
-    }
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q-p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q-p) * (2/3 - t) * 6;
     return p;
+  }
+
+  function maxValue(val, max) {
+    return Min(max, Max(0, val));
   }
 
   /*
@@ -93,12 +89,11 @@ var Color = (function() {
   };
 
   var proto = Color.prototype;
-  
+
   proto.hue = function(h) {
     if (!HSL) toHSL();
     if (h !== undefined) {
-      HSL.h *= h;
-      HSL.h = Math.min(360, Math.max(0, HSL.h));
+      HSL.h = maxValue(h, 360);
     }
     return HSL.h;
   };
@@ -106,8 +101,7 @@ var Color = (function() {
   proto.saturation = function(s) {
     if (!HSL) toHSL();
     if (s !== undefined) {
-      HSL.s *= s;
-      HSL.s = Math.min(1, Math.max(0, HSL.s));
+      HSL.s = maxValue(s, 1);
     }
     return HSL.s;
   };
@@ -115,16 +109,14 @@ var Color = (function() {
   proto.lightness = function(l) {
     if (!HSL) toHSL();
     if (l !== undefined) {
-      HSL.l *= l;
-      HSL.l = Math.min(1, Math.max(0, HSL.l));
+      HSL.l = maxValue(l, 1);
     }
     return HSL.l;
   };
 
   proto.alpha = function(a) {
     if (a !== undefined) {
-      A *= a;
-      A = Math.min(1, Math.max(0, A));
+      A = maxValue(a, 360);
     }
     return A;
   };
