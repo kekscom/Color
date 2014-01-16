@@ -16,7 +16,6 @@ var Color = (function() {
     if (!d) {
       h = s = 0; // achromatic
     } else {
-      d = max-min;
       s = l > 0.5 ? d / (2-max-min) : d / (max+min);
       switch (max) {
         case r: h = (g-b) / d + (g < b ? 6 : 0); break;
@@ -40,13 +39,9 @@ var Color = (function() {
       p = 2 * HSL.l-q;
       HSL.h /= 360;
 
-    R = hue2rgb(p, q, HSL.h + 1/3);
-    G = hue2rgb(p, q, HSL.h      );
-    B = hue2rgb(p, q, HSL.h - 1/3);
-
-    R*255 <<0;
-    G*255 <<0;
-    B*255 <<0;
+    R = hue2rgb(p, q, HSL.h + 1/3) * 255 <<0;
+    G = hue2rgb(p, q, HSL.h      ) * 255 <<0;
+    B = hue2rgb(p, q, HSL.h - 1/3) * 255 <<0;
   }
 
   function hue2rgb(p, q, t) {
