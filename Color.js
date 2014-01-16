@@ -1,6 +1,8 @@
 var Color = (function() {
 
-  var R, G, B, A, HSL;
+  var
+    MODE = 'hex',
+    R, G, B, A, HSL;
 
   function toHSL() {
     var
@@ -42,9 +44,9 @@ var Color = (function() {
     G = hue2rgb(p, q, HSL.h      );
     B = hue2rgb(p, q, HSL.h - 1/3);
 
-    R*255 <<0,
-    G*255 <<0,
-    B*255 <<0,
+    R*255 <<0;
+    G*255 <<0;
+    B*255 <<0;
   }
 
   function hue2rgb(p, q, t) {
@@ -62,27 +64,25 @@ var Color = (function() {
 
   /*
    * str can be in any of these:
-   * #0099ffAA #09fA
-   * #0099ff #09f
-   * 0099ffAA 09fA
-   * 0099ff 09f
+   * #0099ff #0099ffAA #09f #09fA
    * rgb(64, 128, 255) rgba(64, 128, 255, 0.5)
    */
   function Color(str) {
     var m;
     str += '';
-    if (m = str.match(/^#?(\w{2})(\w{2})(\w{2})(\w{2})?$/)) {
-      R = parseInt(m[1], 16),
-      G = parseInt(m[2], 16),
-      B = parseInt(m[3], 16),
-      A = m[4] ? parseInt(m[4], 16) / 255 : 1
+    if (m = str.match(/^#(\w{2})(\w{2})(\w{2})(\w{2})?$/)) {
+      R = parseInt(m[1], 16);
+      G = parseInt(m[2], 16);
+      B = parseInt(m[3], 16);
+      A = m[4] ? parseInt(m[4], 16) / 255 : 1;
     }
 
     if (m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/)) {
-      R = parseInt(m[1], 10),
-      G = parseInt(m[2], 10),
-      B = parseInt(m[3], 10),
-      A = m[4] ? parseFloat(m[5]) : 1
+      MODE = 'rgb'
+      R = parseInt(m[1], 10);
+      G = parseInt(m[2], 10);
+      B = parseInt(m[3], 10);
+      A = m[4] ? parseFloat(m[5]) : 1;
     }
   };
 
@@ -91,26 +91,30 @@ var Color = (function() {
   proto.hue = function(h) {
     if (!HSL) toHSL();
     HSL.h = limit(HSL.h*h, 360);
+    return this;
   };
 
   proto.saturation = function(s) {
     if (!HSL) toHSL();
     HSL.s = limit(HSL.s*s, 1);
+    return this;
   };
 
   proto.lightness = function(l) {
     if (!HSL) toHSL();
     HSL.l = limit(HSL.l*l, 1);
+    return this;
   };
 
   proto.alpha = function(a) {
     A = limit(A*a, 1);
+    return this;
   };
 
   proto.toString = function() {
     if (HSL) toRGB();
-    if (A === 1) {
-      return '#' + ((1 <<24) + (R <<16) + (G <<8) + B).toString(16).slice(1, 7);
+    if (MODE === 'hex') {
+      return '#' + ((1 <<24) + (R <<16) + (G <<8) + B).toString(16).slice(1, 7) + (A < 1 ? (A*256<<0).toString(16) : '');
     }
     return 'rgba(' + [R <<0, G <<0, B <<0, A.toFixed(2)].join(',') + ')';
   };
