@@ -189,10 +189,10 @@ var parseColor = (function() {
       b = hue2rgb(p, q, h - 1/3) * 255;
     }
 
-//    if (this.isHex) {
-//      return '#' + ((1 <<24) + (r <<16) + (g <<8) + b).toString(16).slice(1, 7) + (a < 1 ? (a*256<<0).toString(16) : '');
-//    }
-    return 'rgba(' + [r <<0, g <<0, b <<0, a.toFixed(2)].join(',') + ')';
+    if (a !== 1) {
+      return '#' + ((1 <<24) + (r <<16) + (g <<8) + b).toString(16).slice(1, 7) + (a < 1 ? (a*256<<0).toString(16) : '');
+    }
+    return 'rgba(' + [Math.round(r), Math.round(g), Math.round(b), a.toFixed(2)].join(',') + ')';
   };
 
   proto.hue = function(h) {
@@ -225,7 +225,6 @@ var parseColor = (function() {
     str = w3cColors[str] || str;
 
     if ((m = str.match(/^#(\w{2})(\w{2})(\w{2})(\w{2})?$/))) {
-//    color.isHex = true;
       r = parseInt(m[1], 16);
       g = parseInt(m[2], 16);
       b = parseInt(m[3], 16);
