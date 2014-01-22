@@ -20,12 +20,12 @@ var Color = (function() {
    */
   function Color(str) {
     var
-      r = g = b = 0,
+      r = 0, g = 0, b = 0,
       a = 1,
       m;
 
     str += '';
-    if (m = str.match(/^#(\w{2})(\w{2})(\w{2})(\w{2})?$/)) {
+    if ((m = str.match(/^#(\w{2})(\w{2})(\w{2})(\w{2})?$/))) {
       this.hex = true;
       r = parseInt(m[1], 16);
       g = parseInt(m[2], 16);
@@ -33,7 +33,7 @@ var Color = (function() {
       a = m[4] ? parseInt(m[4], 16) / 255 : 1;
     }
 
-    if (m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/)) {
+    if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
       r = parseInt(m[1], 10);
       g = parseInt(m[2], 10);
       b = parseInt(m[3], 10);
@@ -66,12 +66,12 @@ var Color = (function() {
     this.S = s;
     this.L = l;
     this.A = a;
-  };
+  }
 
   var proto = Color.prototype;
 
   proto.toString = function() {
-    var 
+    var
       h = limit(this.H, 360),
       s = limit(this.S, 1),
       l = limit(this.L, 1),
@@ -99,7 +99,7 @@ var Color = (function() {
     }
     return 'rgba(' + [r <<0, g <<0, b <<0, a.toFixed(2)].join(',') + ')';
   };
-  
+
   return Color;
 
 }());
