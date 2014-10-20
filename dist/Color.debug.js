@@ -1,4 +1,4 @@
-var Color = (function(window) { 'use strict';
+var Color = (function(window) {
 
 
 var w3cColors = {

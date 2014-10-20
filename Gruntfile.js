@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     concat: {
       options: {
         separator: '\n',
-        banner: 'var <%=product%> = (function(window) { \'use strict\';\n\n',
+        banner: 'var <%=product%> = (function(window) {\n\n',
         footer: '\nreturn <%=product%>; }(this));'
       },
       dist: {
