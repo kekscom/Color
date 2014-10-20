@@ -1,4 +1,4 @@
-var Colors = (function(window) { 'use strict';
+var Color = (function(window) { 'use strict';
 
 
 var w3cColors = {
@@ -219,7 +219,7 @@ Color.prototype = {
 
   alpha: function(a) {
     return new Color(this.H, this.S, this.L, this.A*a);
-  }
+  },
 
   /*
    * str can be in any of these:
@@ -269,6 +269,7 @@ Color.prototype = {
     }
 
     return new Color(h, s, l, a);
-  };
+  }
 };
-return Colors; }(this));
+
+return Color; }(this));
