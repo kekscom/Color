@@ -115,9 +115,9 @@ Color.prototype = {
       rgba.b = hue2rgb(p, q, h - 1/3);
     }
 
-    rgba.r *= 255;
-    rgba.g *= 255;
-    rgba.b *= 255;
+    rgba.r *= Math.round(255);
+    rgba.g *= Math.round(255);
+    rgba.b *= Math.round(255);
 
     return rgba;
   },
@@ -128,7 +128,7 @@ Color.prototype = {
     if (rgba.a === 1) {
       return '#' + ((1 <<24) + (rgba.r <<16) + (rgba.g <<8) + rgba.b).toString(16).slice(1, 7);
     }
-    return 'rgba(' + [Math.round(rgba.r), Math.round(rgba.g), Math.round(rgba.b), rgba.a.toFixed(2)].join(',') + ')';
+    return 'rgba(' + [rgba.r, rgba.g, rgba.b, rgba.a.toFixed(2)].join(',') + ')';
   },
 
   hue: function(h) {
