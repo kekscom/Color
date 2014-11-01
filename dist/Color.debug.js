@@ -117,12 +117,20 @@ Color.prototype = {
       rgba.b = hue2rgb(p, q, h - 1/3);
     }
 
+<<<<<<< HEAD
     return {
       r: Math.round(rgba.r*255),
       g: Math.round(rgba.g*255),
       b: Math.round(rgba.b*255),
       a: rgba.a
     };
+=======
+    rgba.r *= Math.round(255);
+    rgba.g *= Math.round(255);
+    rgba.b *= Math.round(255);
+
+    return rgba;
+>>>>>>> 4cfa811f0d90e4efe0c375d9290fe1ca8e9e1058
   },
 
   toString: function() {
