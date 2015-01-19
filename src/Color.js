@@ -29,7 +29,7 @@ function hue2rgb(p, q, t) {
   return p;
 }
 
-function limit(v, max) {
+function clamp(v, max) {
   return Math.min(max, Math.max(0, v));
 }
 
@@ -56,18 +56,29 @@ Color.parse = function(str) {
     r = parseInt(m[1], 16);
     g = parseInt(m[2], 16);
     b = parseInt(m[3], 16);
-} else if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
+  } else if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
     r = parseInt(m[1], 10);
     g = parseInt(m[2], 10);
     b = parseInt(m[3], 10);
     a = m[4] ? parseFloat(m[5]) : 1;
-} else {
-  return;
+  } else {
+    return;
   }
 
-  r /= 255;
-  g /= 255;
-  b /= 255;
+  return this.fromRGBA(r, g, b, a);
+};
+
+Color.fromRGBA = function(r, g, b, a) {
+  if (typeof r === 'object') {
+    g = r.g / 255;
+    b = r.b / 255;
+    a = r.a;
+    r = r.r / 255;
+  } else {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+  }
 
   var
     max = Math.max(r, g, b),
@@ -94,10 +105,10 @@ Color.prototype = {
 
   toRGBA: function() {
     var
-      h = limit(this.H, 360),
-      s = limit(this.S, 1),
-      l = limit(this.L, 1),
-      rgba = { a: limit(this.A, 1) };
+      h = clamp(this.H, 360),
+      s = clamp(this.S, 1),
+      l = clamp(this.L, 1),
+      rgba = { a: clamp(this.A, 1) };
 
     // achromatic
     if (s === 0) {
