@@ -1,8 +1,8 @@
 {
-  "name": "color",
+  "name": "Color",
   "private": false,
-  "description": "very basic color parser and converter",
-  "version": "0.1.0",
+  "description": "Basic color parser and converter.",
+  "version": "0.2.0",
   "homepage": "http://keks.com",
   "author": "@kekscom",
   "contributors": [],
