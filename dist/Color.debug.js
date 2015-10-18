@@ -162,12 +162,6 @@ function clamp(v, max) {
  * @param str can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
  */
 var Color = function(str) {
-  this.R = 0;
-  this.G = 0;
-  this.B = 0;
-  this.A = 1;
-  var m;
-
   if (typeof str === 'object') {
     var rgba = str;
     this.R = clamp(rgba.r, max);
@@ -177,6 +171,7 @@ var Color = function(str) {
   } else if (typeof str === 'string') {
     str = str.toLowerCase();
     str = w3cColors[str] || str;
+    var m;
     if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
       this.R = parseInt(m[1], 16) / 255;
       this.G = parseInt(m[2], 16) / 255;
@@ -186,6 +181,8 @@ var Color = function(str) {
       this.G = parseInt(m[2], 10) / 255;
       this.B = parseInt(m[3], 10) / 255;
       this.A = m[4] ? parseFloat(m[5]) : 1;
+    } else {
+      return;
     }
   }
 };
