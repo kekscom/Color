@@ -175,7 +175,7 @@ var Color = function(str) {
   } else if (typeof str === 'string') {
     str = str.toLowerCase();
     str = w3cColors[str] || str;
-    if ((m = str.match(/^#(\w{2})(\w{2})(\w{2})$/))) {
+    if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
       this.R = parseInt(m[1], 16) / 255;
       this.G = parseInt(m[2], 16) / 255;
       this.B = parseInt(m[3], 16) / 255;
