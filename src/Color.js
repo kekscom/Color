@@ -249,27 +249,28 @@ Color.prototype = {
 
   hue: function(h) {
     var hsl = this.toHSL();
-    hsl.h*h;
+    hsl.h *= h;
     this.fromHSL(hsl);
     return this;
   },
 
   saturation: function(s) {
+    debugger
     var hsl = this.toHSL();
-    hsl.s*s;
+    hsl.s *= s;
     this.fromHSL(hsl);
     return this;
   },
 
   lightness: function(l) {
     var hsl = this.toHSL();
-    hsl.l*l;
+    hsl.l *= l;
     this.fromHSL(hsl);
     return this;
   },
 
   alpha: function(a) {
-    this.A*a;
+    this.A *= a;
     return this;
   }
 };
