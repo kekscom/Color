@@ -246,9 +246,9 @@ Color.prototype = {
 
   toString: function() {
     if (this.A === 1) {
-      return '#' + ((1 <<24) + (this.R <<16) + (this.G <<8) + this.B).toString(16).slice(1, 7);
+      return '#' + ((1 <<24) + (this.R*255 <<16) + (this.G*255 <<8) + this.B*255).toString(16).slice(1, 7);
     }
-    return 'rgba(' + [this.R, this.G, this.B, this.A.toFixed(2)].join(',') + ')';
+    return 'rgba(' + [this.R*255, this.G*255, this.B*255, this.A.toFixed(2)].join(',') + ')';
   },
 
   toArray: function() {
