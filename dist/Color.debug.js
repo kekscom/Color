@@ -245,7 +245,7 @@ Color.prototype = {
   },
 
   toArray: function() {
-    return [this.R, this.G, this.B, this.A];
+    return [this.R, this.G, this.B];
   },
 
   hue: function(h) {
