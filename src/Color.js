@@ -157,7 +157,7 @@ function clamp(v, max) {
 }
 
 /**
- * @param str can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)', { r:0.2, g:0.3, b:0.9, a:1 }
+ * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)', { r:0.2, g:0.3, b:0.9, a:1 }
  */
 var Color = function(str) {
   str = str || '';
@@ -168,10 +168,8 @@ var Color = function(str) {
     this.G = clamp(rgba.g, max);
     this.B = clamp(rgba.b, max);
     this.A = (rgba.a !== undefined ? clamp(rgba.a, 1) : 1);
-    return this;
-  }
-
-  if (typeof str === 'string') {
+    this.isValid = true;
+  } else if (typeof str === 'string') {
     str = str.toLowerCase();
     str = w3cColors[str] || str;
     var m;
@@ -180,19 +178,15 @@ var Color = function(str) {
       this.G = parseInt(m[2], 16) / 255;
       this.B = parseInt(m[3], 16) / 255;
       this.A = 1;
-      return this;
-    }
-
-    if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
+      this.isValid = true;
+    } else if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
       this.R = parseInt(m[1], 10) / 255;
       this.G = parseInt(m[2], 10) / 255;
       this.B = parseInt(m[3], 10) / 255;
       this.A = m[4] ? parseFloat(m[5]) : 1;
-      return this;
+      this.isValid = true;
     }
   }
-
-  return;
 };
 
 Color.prototype = {
