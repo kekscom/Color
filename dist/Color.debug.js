@@ -155,138 +155,120 @@ function hue2rgb(p, q, t) {
 }
 
 function clamp(v, max) {
-  return Math.min(max, Math.max(0, v));
+  return Math.min(max, Math.max(0, v || 0));
 }
 
-var Color = function(h, s, l, a) {
-  this.H = h;
-  this.S = s;
-  this.L = l;
-  this.A = a;
-};
-
-/*
- * str can be in any of these:
- * #0099ff rgb(64, 128, 255) rgba(64, 128, 255, 0.5)
+/**
+ * @param str can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
  */
-Color.parse = function(str) {
-  var
-    r = 0, g = 0, b = 0, a = 1,
-    m;
+var Color = function(str) {
+  this.R = 0;
+  this.G = 0;
+  this.B = 0;
+  this.A = 1;
+  var m;
 
-  str = (''+ str).toLowerCase();
-  str = w3cColors[str] || str;
-
-  if ((m = str.match(/^#(\w{2})(\w{2})(\w{2})$/))) {
-    r = parseInt(m[1], 16);
-    g = parseInt(m[2], 16);
-    b = parseInt(m[3], 16);
-  } else if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
-    r = parseInt(m[1], 10);
-    g = parseInt(m[2], 10);
-    b = parseInt(m[3], 10);
-    a = m[4] ? parseFloat(m[5]) : 1;
-  } else {
-    return;
-  }
-
-  return this.fromRGBA(r, g, b, a);
-};
-
-Color.fromRGBA = function(r, g, b, a) {
-  if (typeof r === 'object') {
-    g = r.g / 255;
-    b = r.b / 255;
-    a = (r.a !== undefined ? r.a : 1);
-    r = r.r / 255;
-  } else {
-    r /= 255;
-    g /= 255;
-    b /= 255;
-    a = (a !== undefined ? a : 1);
-  }
-
-  var
-    max = Math.max(r, g, b),
-    min = Math.min(r, g, b),
-    h, s, l = (max+min) / 2,
-    d = max-min;
-
-  if (!d) {
-    h = s = 0; // achromatic
-  } else {
-    s = l > 0.5 ? d / (2-max-min) : d / (max+min);
-    switch (max) {
-      case r: h = (g-b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b-r) / d + 2; break;
-      case b: h = (r-g) / d + 4; break;
+  if (typeof str === 'object') {
+    var rgba = str;
+    var max = normalized ? 1 : 255;
+    this.R = clamp(rgba.r, max);
+    this.G = clamp(rgba.g, max);
+    this.B = clamp(rgba.b, max);
+    this.A = (rgba.a !== undefined ? clamp(rgba.a, 1) : 1);
+  } else if (typeof str === 'string') {
+    str = str.toLowerCase();
+    str = w3cColors[str] || str;
+    if ((m = str.match(/^#(\w{2})(\w{2})(\w{2})$/))) {
+      this.R = parseInt(m[1], 16) / 255;
+      this.G = parseInt(m[2], 16) / 255;
+      this.B = parseInt(m[3], 16) / 255;
+    } else if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
+      this.R = parseInt(m[1], 10) / 255;
+      this.G = parseInt(m[2], 10) / 255;
+      this.B = parseInt(m[3], 10) / 255;
+      this.A = m[4] ? parseFloat(m[5]) : 1;
     }
-    h *= 60;
   }
-
-  return new Color(h, s, l, a);
 };
 
 Color.prototype = {
 
-  toRGBA: function(normalized) {
+  toHSL: function() {
     var
-      h = clamp(this.H, 360),
-      s = clamp(this.S, 1),
-      l = clamp(this.L, 1),
-      rgba = { a: clamp(this.A, 1) };
+      max = Math.max(this.R, this.G, this.B),
+      min = Math.min(this.R, this.G, this.B),
+      h, s, l = (max+min) / 2,
+      d = max-min;
+
+    if (!d) {
+      h = s = 0; // achromatic
+    } else {
+      s = l > 0.5 ? d / (2-max-min) : d / (max+min);
+      switch (max) {
+        case this.R: h = (this.G-this.B) / d + (this.G < this.B ? 6 : 0); break;
+        case this.G: h = (this.B-this.R) / d + 2; break;
+        case this.B: h = (this.R-this.G) / d + 4; break;
+      }
+      h *= 60;
+    }
+
+    return { h:h, s:s, l:l };
+  },
+
+  fromHSL: function(hsl) {
+  // h = clamp(hsl.h, 360),
+  // s = clamp(hsl.s, 1),
+  // l = clamp(hsl.l, 1),
 
     // achromatic
-    if (s === 0) {
-      rgba.r = l;
-      rgba.g = l;
-      rgba.b = l;
+    if (hsl.s === 0) {
+      this.R = l;
+      this.G = l;
+      this.B = l;
     } else {
       var
-        q = l < 0.5 ? l * (1+s) : l + s - l*s,
-        p = 2 * l-q;
-        h /= 360;
-
-      rgba.r = hue2rgb(p, q, h + 1/3);
-      rgba.g = hue2rgb(p, q, h);
-      rgba.b = hue2rgb(p, q, h - 1/3);
+        q = hsl.l < 0.5 ? hsl.l * (1+hsl.s) : hsl.l + hsl.s - hsl.l*hsl.s,
+        p = 2 * hsl.l-q;
+      hsl.h /= 360;
+      this.R = hue2rgb(p, q, hsl.h + 1/3);
+      this.G = hue2rgb(p, q, hsl.h);
+      this.B = hue2rgb(p, q, hsl.h - 1/3);
     }
 
-    if (normalized) {
-      return rgba;
-    }
-
-    return {
-      r: Math.round(rgba.r*255),
-      g: Math.round(rgba.g*255),
-      b: Math.round(rgba.b*255),
-      a: rgba.a
-    };
+    return this;
   },
 
   toString: function() {
-    var rgba = this.toRGBA();
-
-    if (rgba.a === 1) {
-      return '#' + ((1 <<24) + (rgba.r <<16) + (rgba.g <<8) + rgba.b).toString(16).slice(1, 7);
+    if (this.A === 1) {
+      return '#' + ((1 <<24) + (this.R <<16) + (this.G <<8) + this.B).toString(16).slice(1, 7);
     }
-    return 'rgba(' + [rgba.r, rgba.g, rgba.b, rgba.a.toFixed(2)].join(',') + ')';
+    return 'rgba(' + [this.R, this.G, this.B, this.A.toFixed(2)].join(',') + ')';
   },
 
   hue: function(h) {
-    return new Color(this.H*h, this.S, this.L, this.A);
+    var hsl = this.toHSL();
+    hsl.h*h;
+    this.fromHSL(hsl);
+    return this;
   },
 
   saturation: function(s) {
-    return new Color(this.H, this.S*s, this.L, this.A);
+    var hsl = this.toHSL();
+    hsl.s*s;
+    this.fromHSL(hsl);
+    return this;
   },
 
   lightness: function(l) {
-    return new Color(this.H, this.S, this.L*l, this.A);
+    var hsl = this.toHSL();
+    hsl.l*l;
+    this.fromHSL(hsl);
+    return this;
   },
 
   alpha: function(a) {
-    return new Color(this.H, this.S, this.L, this.A*a);
+    this.A*a;
+    return this;
   }
 };
 
