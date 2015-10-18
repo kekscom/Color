@@ -168,7 +168,6 @@ var Color = function(str) {
 
   if (typeof str === 'object') {
     var rgba = str;
-    var max = normalized ? 1 : 255;
     this.R = clamp(rgba.r, max);
     this.G = clamp(rgba.g, max);
     this.B = clamp(rgba.b, max);
@@ -241,6 +240,10 @@ Color.prototype = {
       return '#' + ((1 <<24) + (this.R <<16) + (this.G <<8) + this.B).toString(16).slice(1, 7);
     }
     return 'rgba(' + [this.R, this.G, this.B, this.A.toFixed(2)].join(',') + ')';
+  },
+
+  toArray: function() {
+    return [this.R, this.G, this.B, this.A];
   },
 
   hue: function(h) {
