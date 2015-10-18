@@ -221,9 +221,9 @@ Color.prototype = {
 
     // achromatic
     if (hsl.s === 0) {
-      this.R = l;
-      this.G = l;
-      this.B = l;
+      this.R = hsl.l;
+      this.G = hsl.l;
+      this.B = hsl.l;
     } else {
       var
         q = hsl.l < 0.5 ? hsl.l * (1+hsl.s) : hsl.l + hsl.s - hsl.l*hsl.s,
