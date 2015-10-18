@@ -160,6 +160,8 @@ function clamp(v, max) {
  * @param str can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)', { r:0.2, g:0.3, b:0.9, a:1 }
  */
 var Color = function(str) {
+  str = str || '';
+
   if (typeof str === 'object') {
     var rgba = str;
     this.R = clamp(rgba.r, max);
