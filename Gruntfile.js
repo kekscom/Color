@@ -6,12 +6,12 @@ module.exports = function(grunt) {
     concat: {
       options: {
         separator: '\n',
-        banner: 'var <%=pkg.name%> = (function(window) {\n\n',
-        footer: '\nreturn <%=pkg.name%>; }(this));'
+        banner: '(function(global) {\n',
+        footer: '\nglobal.<%=pkg.name%> = <%=pkg.name%>;\n}(this));'
       },
       dist: {
-        src: grunt.file.readJSON('files.json'),
-        dest:  'dist/<%=pkg.name%>.debug.js'
+        src: 'src/Color.js',
+        dest: 'dist/<%=pkg.name%>.debug.js'
       }
     },
 
@@ -32,4 +32,10 @@ module.exports = function(grunt) {
     grunt.task.run('concat');
     grunt.task.run('uglify');
   });
+
+  grunt.registerTask('release', 'Release build', function() {
+    grunt.log.writeln('\033[1;36m'+ grunt.template.date(new Date(), 'yyyy-mm-dd HH:MM:ss') +'\033[0m');
+    grunt.task.run('default');
+  });
+
 };

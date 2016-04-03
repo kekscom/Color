@@ -1,4 +1,4 @@
-Copyright (c) 2015, Jan Marsch <jama@keks.com>
+Copyright (c) 2016, Jan Marsch <jama@keks.com>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are

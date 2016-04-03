@@ -1,7 +1,7 @@
 Color
 =====
 
-A very basic color tool for adjusting hue, saturation, lightning and alpha of a given RGB color.
+A very basic color tool for adjusting hue, saturation, lightness and alpha of a given RGB color.
 
 ## Documentation is outdated!
 
