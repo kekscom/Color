@@ -7,7 +7,14 @@ module.exports = function(grunt) {
       options: {
         separator: '\n',
         banner: '(function(global) {\n',
-        footer: '\nglobal.<%=pkg.name%> = <%=pkg.name%>;\n}(this));'
+        footer: "\nif (typeof global.define === 'function') {"+
+        "global.define([], <%=pkg.name%>);"+
+        "} else if (typeof global.exports === 'object') {"+
+        "global.exports = <%=pkg.name%>;"+
+        "} else {"+
+        "global.<%=pkg.name%> = <%=pkg.name%>;"+
+        "}\n"+
+        "}(this));"
       },
       dist: {
         src: 'src/Color.js',
