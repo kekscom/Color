@@ -284,10 +284,17 @@ var Color = (function() {
     alpha: function(a) {
       this.A *= a;
       return this;
+    },
+
+    copy: function() {
+      var color = new Color();
+      color.R = this.R;
+      color.G = this.G;
+      color.B = this.B;
+      color.A = this.A;
+      return Color;
     }
   };
-
-  return Color;
 
 }());
 if (typeof global.define === 'function') {global.define([], Color);} else if (typeof global.exports === 'object') {global.exports = Color;} else {global.Color = Color;}
