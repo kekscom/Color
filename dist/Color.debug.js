@@ -292,7 +292,7 @@ var Color = (function() {
       color.G = this.G;
       color.B = this.B;
       color.A = this.A;
-      return Color;
+      return color;
     }
   };
 
