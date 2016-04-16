@@ -2,7 +2,7 @@
   "name": "Color",
   "private": false,
   "description": "Basic color parser and converter.",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "homepage": "http://keks.com",
   "author": "@kekscom",
   "contributors": [],

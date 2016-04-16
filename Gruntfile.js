@@ -6,15 +6,10 @@ module.exports = function(grunt) {
     concat: {
       options: {
         separator: '\n',
-        banner: '(function(global) {\n',
-        footer: "\nif (typeof global.define === 'function') {"+
-        "global.define([], <%=pkg.name%>);"+
-        "} else if (typeof global.exports === 'object') {"+
-        "global.exports = <%=pkg.name%>;"+
-        "} else {"+
-        "global.<%=pkg.name%> = <%=pkg.name%>;"+
-        "}\n"+
-        "}(this));"
+        banner: "var <%=pkg.name%> = (function() {\n",
+        footer: "\nreturn <%=pkg.name%>;\n\n"+
+          "}());\n\n"+
+          "if (typeof exports === 'object') { exports = <%=pkg.name%>; }\n"
       },
       dist: {
         src: 'src/Color.js',
