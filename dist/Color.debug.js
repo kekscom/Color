@@ -171,9 +171,9 @@ var Color = function(str) {
 
   if (typeof str === 'object') {
     var rgba = str;
-    this.r = clamp(rgba.r, max);
-    this.g = clamp(rgba.g, max);
-    this.b = clamp(rgba.b, max);
+    this.r = clamp(rgba.r, 1);
+    this.g = clamp(rgba.g, 1);
+    this.b = clamp(rgba.b, 1);
     this.a = (rgba.a !== undefined ? clamp(rgba.a, 1) : 1);
   } else if (typeof str === 'string') {
     str = str.toLowerCase();
