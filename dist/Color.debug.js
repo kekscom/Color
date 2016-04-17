@@ -288,4 +288,4 @@ return Color;
 
 }());
 
-if (typeof exports === 'object') { exports = Color; }
+if (typeof module === 'object') { module.exports = Color; }
