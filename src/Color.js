@@ -195,6 +195,10 @@ var Color = function(str) {
 Color.prototype = {
 
   toHSL: function() {
+    if (this.r === undefined || this.g === undefined || this.b === undefined) {
+      return;
+    }
+
     var
       max = Math.max(this.r, this.g, this.b),
       min = Math.min(this.r, this.g, this.b),
@@ -246,6 +250,10 @@ Color.prototype = {
   },
 
   toString: function() {
+    if (this.r === undefined || this.g === undefined || this.b === undefined) {
+      return '';
+    }
+
     if (this.a === 1) {
       return '#' + ((1<<24) + (Math.round(this.r*255)<<16) + (Math.round(this.g*255)<<8) + Math.round(this.b*255)).toString(16).slice(1, 7);
     }
@@ -253,6 +261,9 @@ Color.prototype = {
   },
 
   toArray: function() {
+    if (this.r === undefined || this.g === undefined || this.b === undefined) {
+      return;
+    }
     return [this.r, this.g, this.b];
   },
 
