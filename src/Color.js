@@ -165,7 +165,7 @@ function clamp(v, max) {
 /**
  * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)', { r:0.2, g:0.3, b:0.9, a:1 }
  */
-var Color = function(r, g, b) {
+var Color = function(r, g, b, a) {
   this.r = clamp(r, 1);
   this.g = clamp(g, 1);
   this.b = clamp(b, 1);
@@ -197,14 +197,14 @@ Color.parse = function(str) {
   }
 };
 
-Color.fromHSL = function(h, s, l) {
+Color.fromHSL = function(h, s, l, a) {
   // h = clamp(h, 360),
   // s = clamp(s, 1),
   // l = clamp(l, 1),
 
   // achromatic
   if (s === 0) {
-    return new Color(l, l, l);
+    return new Color(l, l, l, a);
   }
 
   var
@@ -216,7 +216,8 @@ Color.fromHSL = function(h, s, l) {
   return new Color(
     hue2rgb(p, q, h + 1/3),
     hue2rgb(p, q, h),
-    hue2rgb(p, q, h - 1/3)
+    hue2rgb(p, q, h - 1/3),
+    a
   );
 };
 
@@ -251,7 +252,7 @@ Color.prototype = {
       h *= 60;
     }
 
-    return { h: h, s: s, l: l };
+    return { h: h, s: s, l: l, a: a };
   },
 
   toString: function() {
