@@ -253,7 +253,7 @@ Color.prototype = {
       h *= 60;
     }
 
-    return { h: h, s: s, l: l, a: a };
+    return { h: h, s: s, l: l, a: this.a };
   },
 
   toString: function() {
