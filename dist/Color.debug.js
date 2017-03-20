@@ -160,6 +160,9 @@ function hue2rgb(p, q, t) {
 }
 
 function clamp(v, max) {
+  if (v === undefined) {
+    return;
+  }
   return Math.min(max, Math.max(0, v || 0));
 }
 
@@ -170,31 +173,33 @@ var Color = function(r, g, b, a) {
   this.r = clamp(r, 1);
   this.g = clamp(g, 1);
   this.b = clamp(b, 1);
-  this.a = (a !== undefined ? clamp(a, 1) : 1);
+  this.a = clamp(a, 1) || 1;
 };
 
 /**
  * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
  */
 Color.parse = function(str) {
-  if (typeof str === 'string') {
-    str = str.toLowerCase();
-    str = w3cColors[str] || str;
+  if (typeof str !== 'string') {
+    return new Color();
+  }
 
-    var m;
+  str = str.toLowerCase();
+  str = w3cColors[str] || str;
 
-    if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
-      return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
-    }
+  var m;
 
-    if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
-      return new Color(
-        parseFloat(m[1])/255,
-        parseFloat(m[2])/255,
-        parseFloat(m[3])/255,
-        m[4] ? parseFloat(m[5]) : 1
-      );
-    }
+  if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
+    return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
+  }
+
+  if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
+    return new Color(
+      parseFloat(m[1])/255,
+      parseFloat(m[2])/255,
+      parseFloat(m[3])/255,
+      m[4] ? parseFloat(m[5]) : 1
+    );
   }
 };
 
@@ -305,7 +310,7 @@ Color.prototype = {
     return new Color(this.r, this.g, this.b, this.a*a);
   },
 
-  copy: function(l) {
+  copy: function() {
     return new Color(this.r, this.g, this.b, this.a);
   }
 
