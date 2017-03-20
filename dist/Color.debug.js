@@ -263,7 +263,7 @@ Color.prototype = {
 
   toString: function() {
     if (this.r === undefined || this.g === undefined || this.b === undefined) {
-      return '';
+      return;
     }
 
     if (this.a === 1) {
