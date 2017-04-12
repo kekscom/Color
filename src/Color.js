@@ -179,27 +179,27 @@ var Color = function(r, g, b, a) {
  * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
  */
 Color.parse = function(str) {
-  if (typeof str !== 'string') {
-    return new Color();
+  if (typeof str === 'string') {
+    str = str.toLowerCase();
+    str = w3cColors[str] || str;
+
+    var m;
+
+    if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
+      return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
+    }
+
+    if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
+      return new Color(
+        parseFloat(m[1])/255,
+        parseFloat(m[2])/255,
+        parseFloat(m[3])/255,
+        m[4] ? parseFloat(m[5]) : 1
+      );
+    }
   }
 
-  str = str.toLowerCase();
-  str = w3cColors[str] || str;
-
-  var m;
-
-  if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
-    return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
-  }
-
-  if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
-    return new Color(
-      parseFloat(m[1])/255,
-      parseFloat(m[2])/255,
-      parseFloat(m[3])/255,
-      m[4] ? parseFloat(m[5]) : 1
-    );
-  }
+  return new Color();
 };
 
 Color.fromHSL = function(h, s, l, a) {
