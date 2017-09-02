@@ -2,7 +2,7 @@
   "name": "qolor",
   "private": false,
   "description": "Basic color parser and converter.",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "main": "dist/Qolor.js",
   "homepage": "http://keks.com",
   "author": "@kekscom",

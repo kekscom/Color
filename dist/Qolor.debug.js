@@ -1,4 +1,4 @@
-var qolor = (function() {
+var Qolor = (function() {
 var w3cColors = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',

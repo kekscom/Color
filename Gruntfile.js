@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     concat: {
       options: {
         separator: '\n',
-        banner: "var <%=pkg.name%> = (function() {\n",
+        banner: "var Qolor = (function() {\n",
         footer: "\nreturn <%=pkg.name%>;\n\n"+
           "}());\n\n"+
           "if (typeof module === 'object') { module.exports = <%=pkg.name%>; }\n"
