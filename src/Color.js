@@ -232,8 +232,12 @@ Color.fromHSL = function(h, s, l, a) {
 
 Color.prototype = {
 
+  isValid: function() {
+    return this.r === undefined || this.g === undefined || this.b === undefined;
+  },
+
   toHSL: function() {
-    if (this.r === undefined || this.g === undefined || this.b === undefined) {
+    if (!this.isValid()) {
       return;
     }
 
@@ -265,7 +269,7 @@ Color.prototype = {
   },
 
   toString: function() {
-    if (this.r === undefined || this.g === undefined || this.b === undefined) {
+    if (!this.isValid()) {
       return;
     }
 
@@ -276,9 +280,10 @@ Color.prototype = {
   },
 
   toArray: function() {
-    if (this.r === undefined || this.g === undefined || this.b === undefined) {
+    if (!this.isValid()) {
       return;
     }
+    
     return [this.r, this.g, this.b];
   },
 
