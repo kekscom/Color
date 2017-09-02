@@ -12,16 +12,16 @@ module.exports = function(grunt) {
           "if (typeof module === 'object') { module.exports = <%=pkg.name%>; }\n"
       },
       dist: {
-        src: 'src/Color.js',
-        dest: 'dist/<%=pkg.name%>.debug.js'
+        src: 'src/Qolor.js',
+        dest: 'dist/Qolor.debug.js'
       }
     },
 
     uglify: {
       options: {},
       build: {
-        src: 'dist/<%=pkg.name%>.debug.js',
-        dest: 'dist/<%=pkg.name%>.js'
+        src: 'dist/Qolor.debug.js',
+        dest: 'dist/Qolor.js'
       }
     }
   });

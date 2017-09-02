@@ -1,4 +1,4 @@
-var Color = (function() {
+var qolor = (function() {
 var w3cColors = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
@@ -169,7 +169,7 @@ function clamp(v, max) {
 /**
  * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)', { r:0.2, g:0.3, b:0.9, a:1 }
  */
-var Color = function(r, g, b, a) {
+var Qolor = function(r, g, b, a) {
   this.r = clamp(r, 1);
   this.g = clamp(g, 1);
   this.b = clamp(b, 1);
@@ -179,7 +179,7 @@ var Color = function(r, g, b, a) {
 /**
  * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
  */
-Color.parse = function(str) {
+Qolor.parse = function(str) {
   if (typeof str === 'string') {
     str = str.toLowerCase();
     str = w3cColors[str] || str;
@@ -187,15 +187,15 @@ Color.parse = function(str) {
     var m;
 
     if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
-      return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
+      return new Qolor(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
     }
 
     if ((m = str.match(/^#?(\w)(\w)(\w)$/))) {
-      return new Color(parseInt(m[1]+m[1], 16)/255, parseInt(m[2]+m[2], 16)/255, parseInt(m[3]+m[3], 16)/255);
+      return new Qolor(parseInt(m[1]+m[1], 16)/255, parseInt(m[2]+m[2], 16)/255, parseInt(m[3]+m[3], 16)/255);
     }
 
     if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
-      return new Color(
+      return new Qolor(
         parseFloat(m[1])/255,
         parseFloat(m[2])/255,
         parseFloat(m[3])/255,
@@ -204,17 +204,17 @@ Color.parse = function(str) {
     }
   }
 
-  return new Color();
+  return new Qolor();
 };
 
-Color.fromHSL = function(h, s, l, a) {
+Qolor.fromHSL = function(h, s, l, a) {
   // h = clamp(h, 360),
   // s = clamp(s, 1),
   // l = clamp(l, 1),
 
   // achromatic
   if (s === 0) {
-    return new Color(l, l, l, a);
+    return new Qolor(l, l, l, a);
   }
 
   var
@@ -223,7 +223,7 @@ Color.fromHSL = function(h, s, l, a) {
 
   h /= 360;
 
-  return new Color(
+  return new Qolor(
     hue2rgb(p, q, h + 1/3),
     hue2rgb(p, q, h),
     hue2rgb(p, q, h - 1/3),
@@ -231,7 +231,7 @@ Color.fromHSL = function(h, s, l, a) {
   );
 };
 
-Color.prototype = {
+Qolor.prototype = {
 
   isValid: function() {
     return this.r === undefined || this.g === undefined || this.b === undefined;
@@ -290,43 +290,43 @@ Color.prototype = {
 
   hue: function(h) {
     var hsl = this.toHSL();
-    return Color.fromHSL(hsl.h+h, hsl.s, hsl.l);
+    return Qolor.fromHSL(hsl.h+h, hsl.s, hsl.l);
   },
 
   saturation: function(s) {
     var hsl = this.toHSL();
-    return Color.fromHSL(hsl.h, hsl.s*s, hsl.l);
+    return Qolor.fromHSL(hsl.h, hsl.s*s, hsl.l);
   },
 
   lightness: function(l) {
     var hsl = this.toHSL();
-    return Color.fromHSL(hsl.h, hsl.s, hsl.l*l);
+    return Qolor.fromHSL(hsl.h, hsl.s, hsl.l*l);
   },
 
   red: function(r) {
-    return new Color(this.r*r, this.g, this.b, this.a);
+    return new Qolor(this.r*r, this.g, this.b, this.a);
   },
 
   green: function(g) {
-    return new Color(this.r, this.g*g, this.b, this.a);
+    return new Qolor(this.r, this.g*g, this.b, this.a);
   },
 
   blue: function(b) {
-    return new Color(this.r, this.g, this.b*b, this.a);
+    return new Qolor(this.r, this.g, this.b*b, this.a);
   },
 
   alpha: function(a) {
-    return new Color(this.r, this.g, this.b, this.a*a);
+    return new Qolor(this.r, this.g, this.b, this.a*a);
   },
 
   copy: function() {
-    return new Color(this.r, this.g, this.b, this.a);
+    return new Qolor(this.r, this.g, this.b, this.a);
   }
 
 };
 
-return Color;
+return qolor;
 
 }());
 
-if (typeof module === 'object') { module.exports = Color; }
+if (typeof module === 'object') { module.exports = qolor; }

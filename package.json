@@ -1,9 +1,9 @@
 {
-  "name": "Color",
+  "name": "qolor",
   "private": false,
   "description": "Basic color parser and converter.",
   "version": "2.0.4",
-  "main": "dist/Color.js",
+  "main": "dist/Qolor.js",
   "homepage": "http://keks.com",
   "author": "@kekscom",
   "contributors": [],
