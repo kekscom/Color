@@ -323,8 +323,8 @@ Qolor.prototype = {
 
 };
 
-return qolor;
+return Qolor;
 
 }());
 
-if (typeof module === 'object') { module.exports = qolor; }
+if (typeof module === 'object') { module.exports = Qolor; }

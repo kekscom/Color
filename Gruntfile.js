@@ -7,9 +7,9 @@ module.exports = function(grunt) {
       options: {
         separator: '\n',
         banner: "var Qolor = (function() {\n",
-        footer: "\nreturn <%=pkg.name%>;\n\n"+
+        footer: "\nreturn Qolor;\n\n"+
           "}());\n\n"+
-          "if (typeof module === 'object') { module.exports = <%=pkg.name%>; }\n"
+          "if (typeof module === 'object') { module.exports = Qolor; }\n"
       },
       dist: {
         src: 'src/Qolor.js',
