@@ -189,6 +189,10 @@ Color.parse = function(str) {
       return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
     }
 
+    if ((m = str.match(/^#?(\w)(\w)(\w)$/))) {
+      return new Color(parseInt(m[1]+m[1], 16)/255, parseInt(m[2]+m[2], 16)/255, parseInt(m[3]+m[3], 16)/255);
+    }
+
     if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
       return new Color(
         parseFloat(m[1])/255,

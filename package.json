@@ -2,7 +2,7 @@
   "name": "Color",
   "private": false,
   "description": "Basic color parser and converter.",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "main": "dist/Color.js",
   "homepage": "http://keks.com",
   "author": "@kekscom",
