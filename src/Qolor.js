@@ -173,6 +173,8 @@ var Qolor = function(r, g, b, a) {
   this.g = clamp(g, 1);
   this.b = clamp(b, 1);
   this.a = clamp(a, 1) || 1;
+
+  this.isValid = this.r !== undefined && this.g !== undefined && this.b !== undefined;
 };
 
 /**
@@ -232,12 +234,8 @@ Qolor.fromHSL = function(h, s, l, a) {
 
 Qolor.prototype = {
 
-  isValid: function() {
-    return this.r === undefined || this.g === undefined || this.b === undefined;
-  },
-
   toHSL: function() {
-    if (!this.isValid()) {
+    if (!this.isValid) {
       return;
     }
 
@@ -269,7 +267,7 @@ Qolor.prototype = {
   },
 
   toString: function() {
-    if (!this.isValid()) {
+    if (!this.isValid) {
       return;
     }
 
@@ -280,7 +278,7 @@ Qolor.prototype = {
   },
 
   toArray: function() {
-    if (!this.isValid()) {
+    if (!this.isValid) {
       return;
     }
     
