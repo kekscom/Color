@@ -11,6 +11,7 @@
     "type": "git",
     "url": "git@github.com:kekscom/Color.git"
   },
+
   "scripts": {
     "build": "node build.js"
   },
