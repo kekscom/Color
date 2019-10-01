@@ -208,9 +208,9 @@ Qolor.parse = function(str) {
   return new Qolor();
 };
 
-Qolor.fromHSL = function(h, s, l) {
+Qolor.fromHSL = function(h, s, l, a) {
   var qolor = new Qolor().fromHSL(h, s, l);
-  qolor.a = a;
+  qolor.a = a === undefined ? 1 : a;
   return qolor;
 };
 

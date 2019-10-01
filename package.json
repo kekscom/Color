@@ -2,22 +2,19 @@
   "name": "qolor",
   "private": false,
   "description": "Basic color parser and converter.",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "main": "dist/Qolor.js",
-  "homepage": "http://keks.com",
-  "author": "@kekscom",
+  "author": "Jan Marsch",
   "contributors": [],
   "maintainers": [],
   "repository": {
     "type": "git",
     "url": "git@github.com:kekscom/Color.git"
   },
-  "scripts": {},
-  "dependencies": {},
-  "devDependencies": {
-    "grunt": "~0.4.4",
-    "grunt-contrib-concat": "~0.4.0",
-    "grunt-contrib-uglify": "~0.4.0"
+  "scripts": {
+    "build": "node build.js"
   },
-  "optionalDependencies": {}
+  "devDependencies": {
+    "terser": "^4.3.4"
+  }
 }
