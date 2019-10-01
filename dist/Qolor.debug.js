@@ -1,4 +1,3 @@
-var Qolor = (function() {
 var w3cColors = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
@@ -209,9 +208,9 @@ Qolor.parse = function(str) {
   return new Qolor();
 };
 
-Qolor.fromHSL = function(h, s, l) {
+Qolor.fromHSL = function(h, s, l, a) {
   var qolor = new Qolor().fromHSL(h, s, l);
-  qolor.a = a;
+  qolor.a = a === undefined ? 1 : a;
   return qolor;
 };
 
@@ -317,9 +316,3 @@ Qolor.prototype = {
     return new Qolor(this.r, this.g, this.b, this.a);
   }
 };
-
-return Qolor;
-
-}());
-
-if (typeof module === 'object') { module.exports = Qolor; }
