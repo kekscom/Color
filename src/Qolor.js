@@ -1,4 +1,180 @@
-var w3cColors = {
+
+/**
+ * @class
+ */
+class Qolor {
+
+  /**
+   * @constructor
+   * @param r {Number} 0.0 .. 1.0 red value of a color
+   * @param g {Number} 0.0 .. 1.0 green value of a color
+   * @param b {Number} 0.0 .. 1.0 blue value of a color
+   * @param a {Number} 0.0 .. 1.0 alpha value of a color, default 1
+   */
+  constructor (r, g, b, a = 1) {
+    this.r = this._clamp(r, 1);
+    this.g = this._clamp(g, 1);
+    this.b = this._clamp(b, 1);
+    this.a = this._clamp(a, 1);
+  }
+
+  /**
+   * @param str {String} can be any color dfinition like: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
+   */
+  static parse (str) {
+    if (typeof str === 'string') {
+      str = str.toLowerCase();
+      str = Qolor.w3cColors[str] || str;
+
+      let m;
+
+      if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
+        return new Qolor(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
+      }
+
+      if ((m = str.match(/^#?(\w)(\w)(\w)$/))) {
+        return new Qolor(parseInt(m[1]+m[1], 16)/255, parseInt(m[2]+m[2], 16)/255, parseInt(m[3]+m[3], 16)/255);
+      }
+
+      if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
+        return new Qolor(
+          parseFloat(m[1])/255,
+          parseFloat(m[2])/255,
+          parseFloat(m[3])/255,
+          m[4] ? parseFloat(m[5]) : 1
+        );
+      }
+    }
+
+    return new Qolor();
+  }
+
+  static fromHSL (h, s, l, a) {
+    const qolor = new Qolor().fromHSL(h, s, l);
+    qolor.a = a === undefined ? 1 : a;
+    return qolor;
+  }
+
+  //***************************************************************************
+
+  _hue2rgb(p, q, t) {
+    if (t<0) t += 1;
+    if (t>1) t -= 1;
+    if (t<1/6) return p + (q - p)*6*t;
+    if (t<1/2) return q;
+    if (t<2/3) return p + (q - p)*(2/3 - t)*6;
+    return p;
+  }
+
+  _clamp(v, max) {
+    if (v === undefined) {
+      return;
+    }
+    return Math.min(max, Math.max(0, v || 0));
+  }
+
+  //***************************************************************************
+
+  isValid () {
+    return this.r !== undefined && this.g !== undefined && this.b !== undefined;
+  }
+
+  toHSL () {
+    if (!this.isValid()) {
+      return;
+    }
+
+    const max = Math.max(this.r, this.g, this.b);
+    const min = Math.min(this.r, this.g, this.b);
+    const range = max - min;
+    const l = (max + min)/2;
+
+    // achromatic
+    if (!range) {
+      return { h: 0, s: 0, l: l };
+    }
+
+    const s = l > 0.5 ? range/(2 - max - min) : range/(max + min);
+
+    let h;
+    switch (max) {
+      case this.r:
+        h = (this.g - this.b)/range + (this.g<this.b ? 6 : 0);
+        break;
+      case this.g:
+        h = (this.b - this.r)/range + 2;
+        break;
+      case this.b:
+        h = (this.r - this.g)/range + 4;
+        break;
+    }
+    h *= 60;
+
+    return { h: h, s: s, l: l };
+  }
+
+  fromHSL (h, s, l) {
+    // h = this._clamp(h, 360),
+    // s = this._clamp(s, 1),
+    // l = this._clamp(l, 1),
+
+    // achromatic
+    if (s === 0) {
+      this.r = this.g = this.b = l;
+      return this;
+    }
+
+    const q = l<0.5 ? l*(1 + s) : l + s - l*s;
+    const p = 2*l - q;
+
+    h /= 360;
+
+    this.r = this._hue2rgb(p, q, h + 1/3);
+    this.g = this._hue2rgb(p, q, h);
+    this.b = this._hue2rgb(p, q, h - 1/3);
+
+    return this;
+  }
+
+  toString () {
+    if (!this.isValid()) {
+      return;
+    }
+
+    if (this.a === 1) {
+      return '#' + ((1<<24) + (Math.round(this.r*255)<<16) + (Math.round(this.g*255)<<8) + Math.round(this.b*255)).toString(16).slice(1, 7);
+    }
+    return `rgba(${Math.round(this.r*255)},${Math.round(this.g*255)},${Math.round(this.b*255)},${this.a.toFixed(2)})`;
+  }
+
+  toArray () {
+    if (!this.isValid) {
+      return;
+    }
+    return [this.r, this.g, this.b];
+  }
+
+  hue (h) {
+    const hsl = this.toHSL();
+    return this.fromHSL(hsl.h+h, hsl.s, hsl.l);
+  }
+
+  saturation (s) {
+    const hsl = this.toHSL();
+    return this.fromHSL(hsl.h, hsl.s*s, hsl.l);
+  }
+
+  lightness (l) {
+    const hsl = this.toHSL();
+    return this.fromHSL(hsl.h, hsl.s, hsl.l*l);
+  }
+
+  clone () {
+    return new Qolor(this.r, this.g, this.b, this.a);
+  }
+}
+
+Qolor.w3cColors = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
   aqua: '#00ffff',
@@ -149,170 +325,6 @@ var w3cColors = {
   yellowgreen: '#9acd32'
 };
 
-function hue2rgb(p, q, t) {
-  if (t<0) t += 1;
-  if (t>1) t -= 1;
-  if (t<1/6) return p + (q - p)*6*t;
-  if (t<1/2) return q;
-  if (t<2/3) return p + (q - p)*(2/3 - t)*6;
-  return p;
+if (module !== undefined) {
+  module.exports = Qolor;
 }
-
-function clamp(v, max) {
-  if (v === undefined) {
-    return;
-  }
-  return Math.min(max, Math.max(0, v || 0));
-}
-
-//*****************************************************************************
-
-/**
- * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)', { r:0.2, g:0.3, b:0.9, a:1 }
- */
-var Qolor = function(r, g, b, a) {
-  this.r = clamp(r, 1);
-  this.g = clamp(g, 1);
-  this.b = clamp(b, 1);
-  this.a = clamp(a, 1) || 1;
-};
-
-/**
- * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
- */
-Qolor.parse = function(str) {
-  if (typeof str === 'string') {
-    str = str.toLowerCase();
-    str = w3cColors[str] || str;
-
-    var m;
-
-    if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
-      return new Qolor(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
-    }
-
-    if ((m = str.match(/^#?(\w)(\w)(\w)$/))) {
-      return new Qolor(parseInt(m[1]+m[1], 16)/255, parseInt(m[2]+m[2], 16)/255, parseInt(m[3]+m[3], 16)/255);
-    }
-
-    if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
-      return new Qolor(
-        parseFloat(m[1])/255,
-        parseFloat(m[2])/255,
-        parseFloat(m[3])/255,
-        m[4] ? parseFloat(m[5]) : 1
-      );
-    }
-  }
-
-  return new Qolor();
-};
-
-Qolor.fromHSL = function(h, s, l, a) {
-  var qolor = new Qolor().fromHSL(h, s, l);
-  qolor.a = a === undefined ? 1 : a;
-  return qolor;
-};
-
-//*****************************************************************************
-
-Qolor.prototype = {
-
-  isValid: function() {
-    return this.r !== undefined && this.g !== undefined && this.b !== undefined;
-  },
-
-  toHSL: function() {
-    if (!this.isValid()) {
-      return;
-    }
-
-    var
-      max = Math.max(this.r, this.g, this.b),
-      min = Math.min(this.r, this.g, this.b),
-      h, s, l = (max + min)/2,
-      d = max - min;
-
-    if (!d) {
-      h = s = 0; // achromatic
-    } else {
-      s = l>0.5 ? d/(2 - max - min) : d/(max + min);
-      switch (max) {
-        case this.r:
-          h = (this.g - this.b)/d + (this.g<this.b ? 6 : 0);
-          break;
-        case this.g:
-          h = (this.b - this.r)/d + 2;
-          break;
-        case this.b:
-          h = (this.r - this.g)/d + 4;
-          break;
-      }
-      h *= 60;
-    }
-
-    return { h: h, s: s, l: l };
-  },
-
-  fromHSL: function(h, s, l) {
-    // h = clamp(h, 360),
-    // s = clamp(s, 1),
-    // l = clamp(l, 1),
-
-    // achromatic
-    if (s === 0) {
-      this.r = this.g = this.b = l;
-      return this;
-    }
-
-    var
-      q = l<0.5 ? l*(1 + s) : l + s - l*s,
-      p = 2*l - q;
-
-    h /= 360;
-
-    this.r = hue2rgb(p, q, h + 1/3);
-    this.g = hue2rgb(p, q, h);
-    this.b = hue2rgb(p, q, h - 1/3);
-
-    return this;
-  },
-
-  toString: function() {
-    if (!this.isValid()) {
-      return;
-    }
-
-    if (this.a === 1) {
-      return '#' + ((1<<24) + (Math.round(this.r*255)<<16) + (Math.round(this.g*255)<<8) + Math.round(this.b*255)).toString(16).slice(1, 7);
-    }
-    return 'rgba(' + [Math.round(this.r*255), Math.round(this.g*255), Math.round(this.b*255), this.a.toFixed(2)].join(',') + ')';
-  },
-
-  toArray: function() {
-    if (!this.isValid) {
-      return;
-    }
-    
-    return [this.r, this.g, this.b];
-  },
-
-  hue: function(h) {
-    var hsl = this.toHSL();
-    return this.fromHSL(hsl.h+h, hsl.s, hsl.l);
-  },
-
-  saturation: function(s) {
-    var hsl = this.toHSL();
-    return this.fromHSL(hsl.h, hsl.s*s, hsl.l);
-  },
-
-  lightness: function(l) {
-    var hsl = this.toHSL();
-    return this.fromHSL(hsl.h, hsl.s, hsl.l*l);
-  },
-
-  clone: function() {
-    return new Qolor(this.r, this.g, this.b, this.a);
-  }
-};

@@ -1,8 +1,7 @@
 {
   "name": "qolor",
-  "private": false,
-  "description": "Basic color parser and converter.",
-  "version": "2.2.1",
+  "description": "Simple color parser and converter.",
+  "version": "2.3.0",
   "main": "dist/Qolor.js",
   "author": "Jan Marsch",
   "contributors": [],
@@ -11,7 +10,6 @@
     "type": "git",
     "url": "git@github.com:kekscom/Color.git"
   },
-
   "scripts": {
     "build": "node build.js"
   },
