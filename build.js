@@ -20,7 +20,9 @@ function mkpath (dir) {
 
 mkpath(`dist`);
 
-fs.writeFileSync(`dist/Qolor.debug.js`, fs.readFileSync(`src/Qolor.js`));
-fs.writeFileSync(`dist/Qolor.js`, Terser.minify(fs.readFileSync(`src/Qolor.js`)).code);
+const js = fs.readFileSync(`src/Qolor.js`).toString();
+
+fs.writeFileSync(`dist/Qolor.debug.js`, js);
+fs.writeFileSync(`dist/Qolor.js`, Terser.minify(js).code);
 
 console.log('done');

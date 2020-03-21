@@ -325,6 +325,6 @@ Qolor.w3cColors = {
   yellowgreen: '#9acd32'
 };
 
-if (module !== undefined) {
+if (typeof module !== 'undefined') {
   module.exports = Qolor;
 }
